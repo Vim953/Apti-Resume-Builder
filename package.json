@@ -1,17 +1,16 @@
 {
   "name": "apti-resume-builder",
-  "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "apps/api",
-    "apps/web"
-  ],
+  "version": "0.1.0",
+  "workspaces": ["apps/*"],
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
+    "dev:api": "npm run start:dev --workspace=apps/api",
+    "dev:web": "npm run dev --workspace=apps/web",
     "build:api": "npm run build --workspace=apps/api",
     "build:web": "npm run build --workspace=apps/web"
-  },
-  "devDependencies": {
-    "@types/node": "^20.16.5"
   }
 }
 

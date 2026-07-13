@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #5B4FE8;
+}
+
+body {
+  @apply bg-canvas text-ink font-sans antialiased;
+}
+
+/* visible keyboard focus everywhere (NF-A11Y-01) */
+:focus-visible {
+  outline: 2px solid #5B4FE8;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

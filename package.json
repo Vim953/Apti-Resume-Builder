@@ -5,10 +5,13 @@
   "workspaces": [
     "apps/*"
   ],
+  "engines": {
+  "node": "20.x"
+  },
   "scripts": {
     "dev:api": "npm run start:dev --workspace=apps/api",
     "dev:web": "npm run dev --workspace=apps/web",
-    "build:api": "npm run build --workspace=apps/api",
+    "build:api":"npm install --include=dev && npm run build --workspace=apps/api",
     "build:web": "npm run build --workspace=apps/web",
     "install": "npm ci --workspaces"
   },

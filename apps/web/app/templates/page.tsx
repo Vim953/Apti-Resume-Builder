@@ -149,7 +149,7 @@ function PremiumTemplateModal({ templateName, onClose }: { templateName: string;
         <p className="mt-4 text-sm leading-6 text-ink/60">This template is available exclusively for Pro users.</p>
 
         <div className="mt-5 rounded-2xl bg-indigo/5 p-4">
-          <p className="text-sm font-bold text-ink">What you'll unlock:</p>
+          <p className="text-sm font-bold text-ink">What you&apos;ll unlock:</p>
           <div className="mt-3 grid gap-2 text-sm text-ink/70 sm:grid-cols-2">
             {['20+ Premium Templates', 'Unlimited Resumes', 'AI Resume Review', 'Cover Letter Generator', 'Unlimited PDF Exports'].map((item) => (
               <p key={item} className="flex items-center gap-2">

@@ -1,4 +1,4 @@
-import { Body, Controller, InternalServerErrorException, Post } from '@nestjs/common';
+import { Body, ConflictException, Controller, InternalServerErrorException, Post } from '@nestjs/common';
 import { IsArray, IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 import { Inject } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
@@ -62,7 +62,6 @@ export class AuthController {
       skills: body.skills,
     };
 
-    let userId: string | null = null;
     const { data, error } = await this.supabase.auth.admin.createUser({
       email: body.email,
       password: body.password,
@@ -70,25 +69,17 @@ export class AuthController {
       user_metadata: metadata,
     });
 
-    if (data.user) {
-      userId = data.user.id;
+    if (error) {
+      const msg = error.message?.toLowerCase() ?? '';
+      if (msg.includes('already') || msg.includes('exists') || error.status === 422) {
+        throw new ConflictException('An account with this email already exists. Please sign in instead.');
+      }
+      throw new InternalServerErrorException(error.message);
     }
 
-    if (error || !userId) {
-      const { data: usersData, error: listError } = await this.supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
-      if (listError) throw new InternalServerErrorException(listError.message);
-      const existing = usersData.users.find((user) => user.email?.toLowerCase() === body.email.toLowerCase());
-      if (!existing) {
-        throw new InternalServerErrorException(error?.message ?? 'Could not create account');
-      }
-
-      const { error: updateError } = await this.supabase.auth.admin.updateUserById(existing.id, {
-        email_confirm: true,
-        password: body.password,
-        user_metadata: metadata,
-      });
-      if (updateError) throw new InternalServerErrorException(updateError.message);
-      userId = existing.id;
+    const userId = data.user?.id;
+    if (!userId) {
+      throw new InternalServerErrorException('Could not create account');
     }
 
     const { error: profileError } = await this.supabase.from('profiles').upsert({

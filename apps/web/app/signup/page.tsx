@@ -74,15 +74,8 @@ export default function SignupPage() {
       setError(typeof body?.message === 'string' ? body.message : 'Could not create account');
       return;
     }
-
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
-    if (signInError) {
-      setError(signInError.message);
-      return;
-    }
-    router.push('/dashboard');
-    router.refresh();
+    router.push('/login?created=1');
   }
 
   async function signInWithProvider(provider: 'google' | 'github') {
